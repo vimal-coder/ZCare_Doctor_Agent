@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor AI Assistant</title>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="ph-fill ph-shield-plus logo-icon"></i>
+                <div class="logo-text">
+                    <h1>Doctor AI</h1>
+                    <span>Assistant</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="ph-fill ph-chat-circle-dots"></i>
+                    <span>Chat Assistant</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h2>Doctor AI Assistant</h2>
+                <div style="display: flex; gap: 8px;">
+                    <button class="icon-btn" title="Chat History">
+                        <i class="ph ph-clock-counter-clockwise"></i>
+                    </button>
+                    <button class="icon-btn" id="clearAllBtn" title="Clear All Data" style="color: #ef4444;" onclick="clearAllData()">
+                        <i class="ph ph-trash"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Left Panel: Upload -->
+                <section class="panel left-panel">
+                    <div class="panel-header">
+                        <h3>Upload Medical Report</h3>
+                        <p>Upload and analyze medical documents</p>
+                    </div>
+
+                    <div class="upload-zone" id="uploadZone">
+                        <i class="ph ph-cloud-arrow-up upload-icon"></i>
+                        <p class="upload-title">Drag & Drop PDF(s) Here</p>
+                        <p class="upload-or">OR</p>
+                        <!-- Hidden file input -->
+                        <input type="file" id="pdfFile" accept="application/pdf" style="display: none;" multiple>
+                        <button class="btn-primary" onclick="document.getElementById('pdfFile').click()">Choose Files</button>
+                        <p class="upload-hint">Supported format: PDF (Max 50MB)</p>
+                    </div>
+                    
+                    <div id="uploadStatus" class="status-msg"></div>
+
+
+
+                    <!-- Extracted Data (Hidden by default) -->
+                    <div class="extracted-data" id="extractedData" style="display: none;">
+                        <h4>Extracted Clinical Context</h4>
+                        <div id="contextContent"></div>
+                    </div>
+                </section>
+
+                <!-- Right Panel: Chat -->
+                <section class="panel right-panel">
+                    <div class="panel-header">
+                        <h3>AI Clinical Assistant</h3>
+                        <p>Ask questions about patient reports, symptoms, medications, and more.</p>
+                    </div>
+
+                    <div class="chat-container">
+                        <div class="chat-window" id="chatWindow">
+                            <!-- System Init Message -->
+                        </div>
+
+                        <div class="chat-bottom">
+                            <div class="quick-actions">
+                                <h4>Quick Action Queries</h4>
+                                <div class="actions-grid">
+                                    <button class="action-btn" onclick="setQuickQuery('What are the treatment options?')">
+                                        <i class="ph ph-stethoscope" style="color: #059669;"></i>
+                                        <span>Treatment Options</span>
+                                    </button>
+                                    <button class="action-btn" onclick="setQuickQuery('Any suggested home remedies?')">
+                                        <i class="ph ph-plant" style="color: #10b981;"></i>
+                                        <span>Home Remedies</span>
+                                    </button>
+                                    <button class="action-btn" onclick="setQuickQuery('Are there any drug interactions?')">
+                                        <i class="ph ph-warning" style="color: #f59e0b;"></i>
+                                        <span>Drug Interactions</span>
+                                    </button>
+                                    <button class="action-btn" onclick="setQuickQuery('What lifestyle changes are advised?')">
+                                        <i class="ph ph-heartbeat" style="color: #ef4444;"></i>
+                                        <span>Lifestyle Advice</span>
+                                    </button>
+                                    <button class="action-btn" onclick="setQuickQuery('What diet is recommended?')">
+                                        <i class="ph ph-apple-logo" style="color: #84cc16;"></i>
+                                        <span>Diet Recommendations</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="input-area">
+                                <input type="text" id="chatInput" placeholder="Type your clinical question..." disabled>
+                                <button class="send-btn" onclick="sendMessage()" id="sendBtn" disabled>
+                                    <i class="ph-fill ph-paper-plane-tilt"></i>
+                                </button>
+                            </div>
+                            <p class="disclaimer">AI responses are for clinical support only. Please use your medical judgment.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
