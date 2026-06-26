@@ -19,7 +19,7 @@ class MedicalAIAgent:
             model=MODEL_ID,
             temperature=TEMPERATURE,
             google_api_key=GOOGLE_API_KEY,
-            max_output_tokens=MAX_TOKENS
+            
         )
         
         self.graph = self._build_graph()
@@ -37,8 +37,9 @@ class MedicalAIAgent:
         
         system_prompt = f"""You are an advanced Medical AI Assistant designed exclusively as a clinical decision support system for healthcare professionals.
         
-        Use the following Patient Medical Report Context to assist the doctor. 
-        Analyze the current clinical findings together with historical data to provide evidence-based insights.
+        If the user has uploaded any medical images, scans, or reports, you have direct visual access to them. 
+        Please carefully analyze the visual data along with the Patient Medical Report Context below to answer the user's questions. 
+        Always respond like a highly experienced professional doctor providing evidence-based insights.
         
         PATIENT MEDICAL REPORT CONTEXT:
         {context}
@@ -55,8 +56,9 @@ class MedicalAIAgent:
         # Bind the Pydantic schema to Gemini to force structured JSON output
         structured_llm = self.llm.with_structured_output(ExtractedMedicalInfo)
         
-        prompt = f"""Extract the key medical information from the following clinical document. 
+        prompt = f"""Extract the key medical information and identify the report type from the following clinical document. 
         If a category is not mentioned, leave the list empty.
+        For the report type, use a concise name (e.g., 'Ultrasound Scan', 'Blood Test', 'MRI', etc.).
         
         DOCUMENT TEXT:
         {raw_text}
@@ -65,12 +67,21 @@ class MedicalAIAgent:
         result = structured_llm.invoke([HumanMessage(content=prompt)])
         return result
 
-    def chat(self, user_message: str, medical_context: str, chat_history: list = None) -> str:
+    def chat(self, user_message: str, medical_context: str, images: list = None, chat_history: list = None) -> str:
         if chat_history is None:
             chat_history = []
+        if images is None:
+            images = []
+            
+        message_content = [{"type": "text", "text": user_message}]
+        for img in images:
+            message_content.append({
+                "type": "image_url",
+                "image_url": {"url": f"data:{img['mime_type']};base64,{img['data']}"}
+            })
             
         inputs = {
-            "messages": [HumanMessage(content=user_message)],
+            "messages": [HumanMessage(content=message_content)],
             "medical_context": medical_context
         }
         

@@ -47,34 +47,56 @@ ZCare_Doctor_Agent/
 
 ## ⚙️ Setup and Installation
 
+### Prerequisites
+Ensure you have [`uv`](https://docs.astral.sh/uv/) installed. You can install it using:
+
+**macOS / Linux:**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows:**
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
 1. **Clone the repository** (if applicable) or navigate to the project directory:
    ```bash
    cd ZCare_Doctor_Agent
    ```
 
-2. **Create a Virtual Environment** (Recommended):
+2. **Initialize the Project** (if setting up from scratch):
    ```bash
-   python -m venv .venv
-   # On Windows:
-   .venv\Scripts\activate
-   # On macOS/Linux:
-   source .venv/bin/activate
+   uv init
    ```
 
 3. **Install Dependencies**:
-   You can install dependencies using pip:
+   This project uses [`uv`](https://docs.astral.sh/uv/) as the package manager. To create a virtual environment and install all dependencies automatically from `pyproject.toml`, run:
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
-   *(Note: This project is also compatible with `uv` package manager via `pyproject.toml`)*
 
-4. **Environment Variables**:
+   *Alternatively, if you prefer installing from `requirements.txt` using `uv`, run:*
+   ```bash
+   # Create a virtual environment
+   uv venv
+   
+   # Activate it (Windows)
+   .venv\Scripts\activate
+   # Activate it (macOS/Linux)
+   source .venv/bin/activate
+   
+   # Install requirements
+   uv add  -r requirements.txt
+   ```
+
+3. **Environment Variables**:
    Ensure you have a `.env` file in the root directory containing your Google API key:
    ```env
    GOOGLE_API_KEY="your_api_key_here"
    ```
 
-5. **Configuration**:
+4. **Configuration**:
    You can tweak the LLM parameters in `config.ini`:
    ```ini
    [MODEL]
@@ -85,16 +107,16 @@ ZCare_Doctor_Agent/
 
 ## 🏃‍♂️ Running the Application
 
-Start the FastAPI backend server using Uvicorn:
+Start the FastAPI backend server using Uvicorn (via `uv run`):
 
 ```bash
-uvicorn main:app --reload
+uv run uvicorn main:app --reload
 ```
 
 Or run the main script directly:
 
 ```bash
-python main.py
+uv run python main.py
 ```
 
 Once the server is running, open your web browser and navigate to:

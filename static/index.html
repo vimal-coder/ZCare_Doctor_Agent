@@ -56,12 +56,12 @@
 
                     <div class="upload-zone" id="uploadZone">
                         <i class="ph ph-cloud-arrow-up upload-icon"></i>
-                        <p class="upload-title">Drag & Drop PDF(s) Here</p>
+                        <p class="upload-title">Drag & Drop PDF(s) or Image(s) Here</p>
                         <p class="upload-or">OR</p>
                         <!-- Hidden file input -->
-                        <input type="file" id="pdfFile" accept="application/pdf" style="display: none;" multiple>
+                        <input type="file" id="pdfFile" accept="application/pdf,image/png,image/jpeg,image/jpg" style="display: none;" multiple>
                         <button class="btn-primary" onclick="document.getElementById('pdfFile').click()">Choose Files</button>
-                        <p class="upload-hint">Supported format: PDF (Max 50MB)</p>
+                        <p class="upload-hint">Supported formats: PDF, PNG, JPG, JPEG (Max 50MB)</p>
                     </div>
                     
                     <div id="uploadStatus" class="status-msg"></div>

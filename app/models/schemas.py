@@ -13,6 +13,7 @@ class ClearRequest(BaseModel):
 
 # Schema for the structured data we want the AI to extract from the PDF
 class ExtractedMedicalInfo(BaseModel):
+    report_type: Optional[str] = None
     diagnoses: List[str] = []
     medications: List[str] = []
     laboratory_results: List[str] = []

@@ -44,14 +44,19 @@ function handleFileSelection() {
 
     const files = Array.from(fileInput.files);
     
-    // Check if all files are PDFs
-    const allPdfs = files.every(file => file.type === "application/pdf" || file.name.toLowerCase().endsWith('.pdf'));
+    // Check if files are PDFs or Images
+    const allValid = files.every(file => {
+        const type = file.type;
+        const name = file.name.toLowerCase();
+        return type === "application/pdf" || name.endsWith('.pdf') || 
+               type.startsWith("image/") || name.match(/\.(png|jpe?g)$/i);
+    });
     
-    if (!allPdfs) {
-        statusDiv.innerHTML = "<span style='color: #ef4444; font-weight: 500;'>Only PDF reports are supported.</span>";
+    if (!allValid) {
+        statusDiv.innerHTML = "<span style='color: #ef4444; font-weight: 500;'>Only PDF and Image reports are supported.</span>";
         fileInput.value = "";
-        uploadTitle.innerText = "Drag & Drop PDF(s) Here";
-        uploadHint.innerText = "Supported format: PDF (Max 50MB)";
+        uploadTitle.innerText = "Drag & Drop PDF(s) or Image(s) Here";
+        uploadHint.innerText = "Supported formats: PDF, PNG, JPG, JPEG (Max 50MB)";
         return;
     }
 
@@ -117,6 +122,7 @@ function displayExtractedData(data) {
     let html = '';
     const formatList = (list) => list && list.length > 0 ? list.join(', ') : 'None noted';
 
+    html += `<div class="data-group"><strong>Report Type:</strong> <span>${data.report_type || 'Not specified'}</span></div>`;
     html += `<div class="data-group"><strong>Diagnoses:</strong> <span>${formatList(data.diagnoses)}</span></div>`;
     html += `<div class="data-group"><strong>Medications:</strong> <span>${formatList(data.medications)}</span></div>`;
     html += `<div class="data-group"><strong>Conditions:</strong> <span>${formatList(data.medical_conditions)}</span></div>`;
@@ -238,7 +244,7 @@ chatInput.addEventListener('keypress', function (e) {
 
 // Init system message
 window.onload = () => {
-    addMessageToChat("system", "Please upload a patient medical report (.pdf) to begin the analysis.");
+    addMessageToChat("system", "Please upload a patient medical report (PDF or Image) to begin the analysis.");
 };
 
 // Clear all data and reset UI
@@ -260,8 +266,8 @@ async function clearAllData() {
 
     // Reset Upload UI
     fileInput.value = "";
-    uploadTitle.innerText = "Drag & Drop PDF(s) Here";
-    uploadHint.innerText = "Supported format: PDF (Max 50MB)";
+    uploadTitle.innerText = "Drag & Drop PDF(s) or Image(s) Here";
+    uploadHint.innerText = "Supported formats: PDF, PNG, JPG, JPEG (Max 50MB)";
     statusDiv.innerHTML = "";
     extractedDataBox.style.display = 'none';
     document.getElementById('contextContent').innerHTML = "";
@@ -274,5 +280,5 @@ async function clearAllData() {
     sendBtn.disabled = true;
 
     // Re-initialize system message
-    addMessageToChat("system", "Please upload a patient medical report (.pdf) to begin the analysis.");
+    addMessageToChat("system", "Please upload a patient medical report (PDF or Image) to begin the analysis.");
 }
